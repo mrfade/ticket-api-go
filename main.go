@@ -41,5 +41,9 @@ func main() {
 	r.GET("/people", middlewares.PagedResource, controllers.GetPeople)
 	r.GET("/person/:id", controllers.GetPerson)
 
+	// Places
+	r.GET("/places", middlewares.PagedResource, controllers.GetPlaces)
+	r.GET("/place/:id", controllers.GetPlace)
+
 	r.Run()
 }
