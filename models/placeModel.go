@@ -11,4 +11,5 @@ type Place struct {
 	Address     string
 	Latitude    float64
 	Longitude   float64
+	Theaters    *[]Theater `gorm:"foreignKey:PlaceId" json:",omitempty"`
 }
