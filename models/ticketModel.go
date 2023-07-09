@@ -8,5 +8,6 @@ type Ticket struct {
 	User       *User `gorm:"foreignKey:UserId"`
 	SessionId  uint
 	Session    *MovieSession `gorm:"foreignKey:SessionId"`
+	Seats      []TheaterSeat `gorm:"many2many:movie_session_seats;"`
 	TotalPrice uint
 }
