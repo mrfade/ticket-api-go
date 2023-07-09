@@ -21,6 +21,10 @@ func main() {
 		})
 	})
 
+	// Casts
+	r.GET("/casts", middlewares.PagedResource, controllers.GetCasts)
+	r.GET("/cast/:id", controllers.GetCast)
+
 	// Cities
 	r.GET("/cities", controllers.GetCities)
 	r.GET("/city/:id", controllers.GetCity)
