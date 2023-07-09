@@ -29,6 +29,10 @@ func main() {
 	r.GET("/cities", controllers.GetCities)
 	r.GET("/city/:id", controllers.GetCity)
 
+	// Crews
+	r.GET("/crews", middlewares.PagedResource, controllers.GetCrews)
+	r.GET("/crew/:id", controllers.GetCrew)
+
 	// People
 	r.GET("/people", middlewares.PagedResource, controllers.GetPeople)
 	r.GET("/person/:id", controllers.GetPerson)
