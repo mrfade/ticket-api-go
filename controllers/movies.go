@@ -1,0 +1,36 @@
+package controllers
+
+import (
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+	"github.com/mrfade/ticket-api-go/helpers"
+	"github.com/mrfade/ticket-api-go/models"
+	"gorm.io/gorm"
+)
+
+func GetMovies(c *gin.Context) {
+	var movies []models.Movie
+
+	filter := func(db *gorm.DB) *gorm.DB {
+		return db.Preload("Director")
+	}
+
+	searchFilter := func(db *gorm.DB, search string) *gorm.DB {
+		return db.Where("title LIKE ?", "%"+search+"%").Or("original_title LIKE ?", "%"+search+"%")
+	}
+
+	helpers.Paginate(c, &movies, models.Movie{}, filter, searchFilter)
+}
+
+func GetMovie(c *gin.Context) {
+	var movie models.Movie
+
+	if err := helpers.FirstOrFailWithSlug(c, &movie, c.Param("id"), "Director"); err != nil {
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"data": movie,
+	})
+}
