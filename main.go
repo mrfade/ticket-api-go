@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/mrfade/ticket-api-go/controllers"
 	"github.com/mrfade/ticket-api-go/initializers"
 )
 
@@ -18,6 +19,10 @@ func main() {
 			"message": "Welcome to Ticket API",
 		})
 	})
+
+	// Cities
+	r.GET("/cities", controllers.GetCities)
+	r.GET("/city/:id", controllers.GetCity)
 
 	r.Run()
 }
