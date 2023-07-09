@@ -30,3 +30,23 @@ func GetPerson(c *gin.Context) {
 		"data": person,
 	})
 }
+
+func GetPersonMovies(c *gin.Context) {
+	var person models.Person
+
+	if err := helpers.FirstOrFailWithSlug(c, &person, c.Param("id")); err != nil {
+		return
+	}
+
+	var movies []models.Movie
+
+	filter := func(db *gorm.DB) *gorm.DB {
+		return db.Joins("JOIN casts ON casts.movie_id = movies.id").Where("casts.person_id = ?", person.ID)
+	}
+
+	searchFilter := func(db *gorm.DB, search string) *gorm.DB {
+		return db.Where("title LIKE ?", "%"+search+"%").Or("original_title LIKE ?", "%"+search+"%")
+	}
+
+	helpers.Paginate(c, &movies, models.Movie{}, filter, searchFilter)
+}
