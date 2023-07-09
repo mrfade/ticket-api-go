@@ -21,6 +21,10 @@ func main() {
 		})
 	})
 
+	// Auth
+	r.POST("/login", controllers.Login)
+	r.POST("/register", controllers.Register)
+
 	// Casts
 	r.GET("/casts", middlewares.PagedResource, controllers.GetCasts)
 	r.GET("/cast/:id", controllers.GetCast)
