@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/mrfade/ticket-api-go/controllers"
 	"github.com/mrfade/ticket-api-go/initializers"
+	"github.com/mrfade/ticket-api-go/middlewares"
 )
 
 func init() {
@@ -23,6 +24,10 @@ func main() {
 	// Cities
 	r.GET("/cities", controllers.GetCities)
 	r.GET("/city/:id", controllers.GetCity)
+
+	// People
+	r.GET("/people", middlewares.PagedResource, controllers.GetPeople)
+	r.GET("/person/:id", controllers.GetPerson)
 
 	r.Run()
 }
