@@ -13,7 +13,7 @@ func GetMovies(c *gin.Context) {
 	var movies []models.Movie
 
 	filter := func(db *gorm.DB) *gorm.DB {
-		return db.Preload("Director")
+		return db.Preload("Genres").Preload("Director")
 	}
 
 	searchFilter := func(db *gorm.DB, search string) *gorm.DB {
@@ -26,7 +26,7 @@ func GetMovies(c *gin.Context) {
 func GetMovie(c *gin.Context) {
 	var movie models.Movie
 
-	if err := helpers.FirstOrFailWithSlug(c, &movie, c.Param("id"), "Director"); err != nil {
+	if err := helpers.FirstOrFailWithSlug(c, &movie, c.Param("id"), "Genres", "Director"); err != nil {
 		return
 	}
 
