@@ -28,6 +28,7 @@ func main() {
 	// Cities
 	r.GET("/cities", controllers.GetCities)
 	r.GET("/city/:id", controllers.GetCity)
+	r.GET("/city/:id/places", middlewares.PagedResource, controllers.GetCityPlaces)
 
 	// Crews
 	r.GET("/crews", middlewares.PagedResource, controllers.GetCrews)

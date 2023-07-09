@@ -7,6 +7,7 @@ import (
 	"github.com/mrfade/ticket-api-go/helpers"
 	"github.com/mrfade/ticket-api-go/initializers"
 	"github.com/mrfade/ticket-api-go/models"
+	"gorm.io/gorm"
 )
 
 func GetCities(c *gin.Context) {
@@ -29,4 +30,18 @@ func GetCity(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"data": city,
 	})
+}
+
+func GetCityPlaces(c *gin.Context) {
+	var places []models.Place
+
+	filter := func(db *gorm.DB) *gorm.DB {
+		return db.Preload("City").Where("city_id = ?", c.Param("id"))
+	}
+
+	searchFilter := func(db *gorm.DB, search string) *gorm.DB {
+		return db.Where("name LIKE ?", "%"+search+"%")
+	}
+
+	helpers.Paginate(c, &places, models.Place{}, filter, searchFilter)
 }
