@@ -62,6 +62,7 @@ func main() {
 	r.GET("/theaters", middlewares.PagedResource, controllers.GetTheaters)
 	r.GET("/theater/:id", controllers.GetTheater)
 	r.GET("/theater/:id/seats", middlewares.PagedResource, controllers.GetTheaterSeats)
+	r.GET("/theater/:id/sessions", middlewares.PagedResource, controllers.GetTheaterSessions)
 
 	r.Run()
 }

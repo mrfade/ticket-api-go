@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/mrfade/ticket-api-go/helpers"
@@ -39,4 +40,22 @@ func GetTheaterSeats(c *gin.Context) {
 	}
 
 	helpers.Paginate(c, &seats, models.TheaterSeat{}, filter, nil)
+}
+
+func GetTheaterSessions(c *gin.Context) {
+	var sessions []models.MovieSession
+
+	var date time.Time
+	if c.Query("date") != "" {
+		date, _ = time.Parse("2006-01-02", c.Query("date"))
+	}
+
+	filter := func(db *gorm.DB) *gorm.DB {
+		if !date.IsZero() {
+			db.Where("show_time BETWEEN ? AND ?", date.Format(time.DateOnly), date.Add(24*time.Hour).Format(time.DateOnly))
+		}
+		return db.Where("theater_id = ?", c.Param("id"))
+	}
+
+	helpers.Paginate(c, &sessions, models.MovieSession{}, filter, nil)
 }
