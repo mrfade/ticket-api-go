@@ -54,6 +54,7 @@ func main() {
 	// Places
 	r.GET("/places", middlewares.PagedResource, controllers.GetPlaces)
 	r.GET("/place/:id", controllers.GetPlace)
+	r.GET("/place/:id/sessions", middlewares.PagedResource, controllers.GetPlaceSessions)
 	r.GET("/place/:id/theaters", middlewares.PagedResource, controllers.GetPlaceTheaters)
 
 	// Search

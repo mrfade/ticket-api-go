@@ -2,9 +2,11 @@ package controllers
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/mrfade/ticket-api-go/helpers"
+	"github.com/mrfade/ticket-api-go/initializers"
 	"github.com/mrfade/ticket-api-go/models"
 	"gorm.io/gorm"
 )
@@ -47,4 +49,59 @@ func GetPlaceTheaters(c *gin.Context) {
 	}
 
 	helpers.Paginate(c, &theaters, models.Theater{}, filter, searchFilter)
+}
+
+func GetPlaceSessions(c *gin.Context) {
+	var sessions []models.MovieSession
+
+	// fetch place's theaters
+	var theaters []models.Theater
+	if err := initializers.DB.Where("place_id = ?", c.Param("id")).Find(&theaters).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": "Not found!",
+		})
+
+		return
+	}
+
+	if len(theaters) == 0 {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": "Not found!",
+		})
+
+		return
+	}
+
+	// get theater ids
+	var theaterIds []uint
+	for _, theater := range theaters {
+		theaterIds = append(theaterIds, theater.ID)
+	}
+
+	// parse date
+	var date time.Time
+	if c.Query("date") != "" {
+		var err error
+		date, err = time.Parse("2006-01-02", c.Query("date"))
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error": "Invalid date format",
+			})
+
+			return
+		}
+	}
+
+	filter := func(db *gorm.DB) *gorm.DB {
+		if !date.IsZero() {
+			db.Where("show_time BETWEEN ? AND ?", date.Format(time.DateOnly), date.Add(24*time.Hour).Format(time.DateOnly))
+		}
+		return db.Where("theater_id IN ?", theaterIds).Preload("Theater")
+	}
+
+	searchFilter := func(db *gorm.DB, search string) *gorm.DB {
+		return db.Where("name LIKE", "%"+search+"%")
+	}
+
+	helpers.Paginate(c, &sessions, models.MovieSession{}, filter, searchFilter)
 }
