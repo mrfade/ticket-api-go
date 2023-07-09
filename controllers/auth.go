@@ -13,7 +13,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func Signup(c *gin.Context) {
+func Register(c *gin.Context) {
 	// get the email and password from the req body
 	var body struct {
 		Email    string
