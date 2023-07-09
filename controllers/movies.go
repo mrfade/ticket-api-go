@@ -85,9 +85,7 @@ func GetMovieSessions(c *gin.Context) {
 	if qdate != "" {
 		var err error
 		if date, err = time.Parse("2006-01-02", qdate); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{
-				"error": "Invalid date format",
-			})
+			helpers.ErrorJSON(c, http.StatusBadRequest, "Invalid date format")
 			return
 		}
 	}
@@ -101,9 +99,7 @@ func GetMovieSessions(c *gin.Context) {
 	}
 
 	if cityId == 0 || date.IsZero() {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Invalid query",
-		})
+		helpers.ErrorJSON(c, http.StatusBadRequest, "Invalid query")
 		return
 	}
 

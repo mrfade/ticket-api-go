@@ -7,6 +7,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
+	"github.com/mrfade/ticket-api-go/helpers"
 	"github.com/mrfade/ticket-api-go/initializers"
 	"github.com/mrfade/ticket-api-go/models"
 	"golang.org/x/crypto/bcrypt"
@@ -20,10 +21,7 @@ func Signup(c *gin.Context) {
 	}
 
 	if c.Bind(&body) != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "failed to read body",
-		})
-
+		helpers.ErrorJSON(c, http.StatusBadRequest, "Request body is invalid")
 		return
 	}
 
@@ -31,10 +29,7 @@ func Signup(c *gin.Context) {
 	hash, err := bcrypt.GenerateFromPassword([]byte(body.Password), 10)
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": "failed to hash password",
-		})
-
+		helpers.ErrorJSON(c, http.StatusInternalServerError, "Failed to hash the password")
 		return
 	}
 
@@ -43,10 +38,7 @@ func Signup(c *gin.Context) {
 	result := initializers.DB.Create(&user)
 
 	if result.Error != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": "failed to create the user",
-		})
-
+		helpers.ErrorJSON(c, http.StatusInternalServerError, "Failed to create the user")
 		return
 	}
 
@@ -62,10 +54,7 @@ func Login(c *gin.Context) {
 	}
 
 	if c.Bind(&body) != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "failed to read body",
-		})
-
+		helpers.ErrorJSON(c, http.StatusBadRequest, "Request body is invalid")
 		return
 	}
 
@@ -74,10 +63,7 @@ func Login(c *gin.Context) {
 	initializers.DB.First(&user, "email = ?", body.Email)
 
 	if user.ID == 0 {
-		c.JSON(http.StatusNotFound, gin.H{
-			"error": "user not found",
-		})
-
+		helpers.ErrorJSON(c, http.StatusNotFound, "User not found")
 		return
 	}
 
@@ -85,10 +71,7 @@ func Login(c *gin.Context) {
 	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(body.Password))
 
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "password wrong",
-		})
-
+		helpers.ErrorJSON(c, http.StatusBadRequest, "Password is invalid")
 		return
 	}
 
@@ -102,10 +85,7 @@ func Login(c *gin.Context) {
 	tokenString, err := token.SignedString([]byte(os.Getenv("SECRET")))
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": "failed to create jwt",
-		})
-
+		helpers.ErrorJSON(c, http.StatusInternalServerError, "Failed to generate token")
 		return
 	}
 

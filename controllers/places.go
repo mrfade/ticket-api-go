@@ -57,18 +57,12 @@ func GetPlaceSessions(c *gin.Context) {
 	// fetch place's theaters
 	var theaters []models.Theater
 	if err := initializers.DB.Where("place_id = ?", c.Param("id")).Find(&theaters).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{
-			"error": "Not found!",
-		})
-
+		helpers.ErrorJSON(c, http.StatusNotFound, "Not found!")
 		return
 	}
 
 	if len(theaters) == 0 {
-		c.JSON(http.StatusNotFound, gin.H{
-			"error": "Not found!",
-		})
-
+		helpers.ErrorJSON(c, http.StatusNotFound, "Not found!")
 		return
 	}
 
@@ -84,10 +78,7 @@ func GetPlaceSessions(c *gin.Context) {
 		var err error
 		date, err = time.Parse("2006-01-02", c.Query("date"))
 		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{
-				"error": "Invalid date format",
-			})
-
+			helpers.ErrorJSON(c, http.StatusBadRequest, "Invalid date format")
 			return
 		}
 	}

@@ -17,10 +17,7 @@ func FirstOrFail(c *gin.Context, model interface{}, id string, preload ...string
 	query.First(model, id)
 
 	if query.Error != nil {
-		c.JSON(http.StatusNotFound, gin.H{
-			"error": "Not found!",
-		})
-
+		ErrorJSON(c, http.StatusNotFound, "Not found!")
 		return query.Error
 	}
 
@@ -37,10 +34,7 @@ func FirstOrFailWithSlug(c *gin.Context, model interface{}, id string, preload .
 	query.Where("id = ?", id).Or("slug = ?", id).First(model)
 
 	if query.Error != nil {
-		c.JSON(http.StatusNotFound, gin.H{
-			"error": "Not found!",
-		})
-
+		ErrorJSON(c, http.StatusNotFound, "Not found!")
 		return query.Error
 	}
 
