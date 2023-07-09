@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/mrfade/ticket-api-go/helpers"
+	"github.com/mrfade/ticket-api-go/initializers"
 	"github.com/mrfade/ticket-api-go/models"
 	"gorm.io/gorm"
 )
@@ -65,4 +66,14 @@ func GetMovieCrew(c *gin.Context) {
 	}
 
 	helpers.Paginate(c, &crews, models.Crew{}, filter, nil)
+}
+
+func GetSimilarMovies(c *gin.Context) {
+	var movies []models.Movie
+
+	initializers.DB.Preload("Genres").Preload("Director").Order("rand()").Limit(6).Find(&movies)
+
+	c.JSON(http.StatusOK, gin.H{
+		"data": movies,
+	})
 }
