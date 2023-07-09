@@ -33,6 +33,10 @@ func main() {
 	r.GET("/crews", middlewares.PagedResource, controllers.GetCrews)
 	r.GET("/crew/:id", controllers.GetCrew)
 
+	// Genres
+	r.GET("/genres", middlewares.PagedResource, controllers.GetGenres)
+	r.GET("/genre/:id", controllers.GetGenre)
+
 	// People
 	r.GET("/people", middlewares.PagedResource, controllers.GetPeople)
 	r.GET("/person/:id", controllers.GetPerson)
