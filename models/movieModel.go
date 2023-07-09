@@ -25,4 +25,5 @@ type Movie struct {
 	Rating           float32
 	DirectorId       uint
 	Director         *Person `gorm:"foreignKey:DirectorId"`
+	Genres           []Genre `gorm:"many2many:movie_genres;"`
 }
