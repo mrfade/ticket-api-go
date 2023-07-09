@@ -34,3 +34,17 @@ func GetPlace(c *gin.Context) {
 		"data": place,
 	})
 }
+
+func GetPlaceTheaters(c *gin.Context) {
+	var theaters []models.Theater
+
+	filter := func(db *gorm.DB) *gorm.DB {
+		return db.Where("place_id = ?", c.Param("id"))
+	}
+
+	searchFilter := func(db *gorm.DB, search string) *gorm.DB {
+		return db.Where("name LIKE", "%"+search+"%")
+	}
+
+	helpers.Paginate(c, &theaters, models.Theater{}, filter, searchFilter)
+}
