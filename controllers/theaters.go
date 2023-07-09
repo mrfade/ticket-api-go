@@ -30,3 +30,13 @@ func GetTheater(c *gin.Context) {
 		"data": theater,
 	})
 }
+
+func GetTheaterSeats(c *gin.Context) {
+	var seats []models.TheaterSeat
+
+	filter := func(db *gorm.DB) *gorm.DB {
+		return db.Where("theater_id = ?", c.Param("id"))
+	}
+
+	helpers.Paginate(c, &seats, models.TheaterSeat{}, filter, nil)
+}
