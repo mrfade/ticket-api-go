@@ -50,3 +50,19 @@ func GetMovieCast(c *gin.Context) {
 
 	helpers.Paginate(c, &casts, models.Cast{}, filter, nil)
 }
+
+func GetMovieCrew(c *gin.Context) {
+	var movie models.Movie
+
+	if err := helpers.FirstOrFailWithSlug(c, &movie, c.Param("id")); err != nil {
+		return
+	}
+
+	var crews []models.Crew
+
+	filter := func(db *gorm.DB) *gorm.DB {
+		return db.Where("movie_id = ?", movie.ID).Preload("Person")
+	}
+
+	helpers.Paginate(c, &crews, models.Crew{}, filter, nil)
+}

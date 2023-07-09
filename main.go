@@ -42,6 +42,7 @@ func main() {
 	r.GET("/movies", middlewares.PagedResource, controllers.GetMovies)
 	r.GET("/movie/:id", controllers.GetMovie)
 	r.GET("/movie/:id/cast", middlewares.PagedResource, controllers.GetMovieCast)
+	r.GET("/movie/:id/crew", middlewares.PagedResource, controllers.GetMovieCrew)
 
 	// People
 	r.GET("/people", middlewares.PagedResource, controllers.GetPeople)
