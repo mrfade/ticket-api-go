@@ -10,5 +10,6 @@ type Theater struct {
 	Seats         *[]TheaterSeat `gorm:"foreignKey:TheaterId" json:",omitempty"`
 	PlaceId       uint
 	Place         *Place          `gorm:"foreignKey:PlaceId" json:",omitempty"`
+	Prices        *[]TheaterPrice `gorm:"foreignKey:TheaterId" json:",omitempty"`
 	MovieSessions *[]MovieSession `gorm:"foreignKey:TheaterId" json:",omitempty"`
 }
