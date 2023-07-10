@@ -13,6 +13,7 @@ func SyncDatabase() {
 	DB.AutoMigrate(&models.MovieSessionSeat{})
 	DB.AutoMigrate(&models.Person{})
 	DB.AutoMigrate(&models.Place{})
+	DB.AutoMigrate(&models.Role{})
 	DB.AutoMigrate(&models.Theater{})
 	DB.AutoMigrate(&models.TheaterPrice{})
 	DB.AutoMigrate(&models.TheaterSeat{})

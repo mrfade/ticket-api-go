@@ -7,6 +7,6 @@ type User struct {
 	Name     string
 	Email    string `gorm:"unique"`
 	Password string
-	Status   string `gorm:"default:active"`
-	Role     string `gorm:"default:member"`
+	Status   string  `gorm:"default:active"`
+	Roles    *[]Role `gorm:"many2many:user_roles;"`
 }
