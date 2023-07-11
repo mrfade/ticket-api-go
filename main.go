@@ -31,8 +31,8 @@ func main() {
 	})
 
 	// Auth
-	r.POST("/login", controllers.Login)
-	r.POST("/register", controllers.Register)
+	r.POST("/auth/login", controllers.Login)
+	r.POST("/auth/register", controllers.Register)
 
 	// Casts
 	r.GET("/casts", middlewares.PagedResource, controllers.GetCasts)
