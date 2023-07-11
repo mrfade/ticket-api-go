@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/mrfade/ticket-api-go/controllers"
 	"github.com/mrfade/ticket-api-go/initializers"
@@ -14,6 +15,14 @@ func init() {
 
 func main() {
 	r := gin.Default()
+
+	config := cors.DefaultConfig()
+	config.AllowOrigins = []string{
+		"http://localhost:3000",
+		"https://ticket.solak.dev",
+	}
+
+	r.Use(cors.New(config))
 
 	r.GET("/", func(c *gin.Context) {
 		c.JSON(200, gin.H{
