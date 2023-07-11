@@ -16,7 +16,15 @@ func RequireAuth(c *gin.Context) {
 	// get the cookie
 	tokenString, err := c.Cookie("Authorization")
 
-	if err != nil {
+	// get the Authorization header
+	if tokenString == "" || err != nil {
+		tokenString = c.GetHeader("Authorization")
+		if tokenString != "" {
+			tokenString = tokenString[7:]
+		}
+	}
+
+	if tokenString == "" {
 		c.AbortWithStatus(http.StatusUnauthorized)
 	}
 
