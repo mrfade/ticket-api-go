@@ -17,6 +17,8 @@ func main() {
 	r := gin.Default()
 
 	config := cors.DefaultConfig()
+	config.AllowCredentials = true
+	config.AllowHeaders = []string{"Authorization", "Content-Type"}
 	config.AllowOrigins = []string{
 		"http://localhost:3000",
 		"https://ticket.solak.dev",
