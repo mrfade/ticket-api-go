@@ -43,7 +43,7 @@ func RequireAuth(c *gin.Context) {
 
 	// find the user with token sub
 	var user models.User
-	initializers.DB.First(&user, claims["sub"])
+	initializers.DB.Preload("Roles").First(&user, claims["sub"])
 
 	if user.ID == 0 {
 		c.AbortWithStatus(http.StatusUnauthorized)
