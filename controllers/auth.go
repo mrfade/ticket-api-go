@@ -25,6 +25,15 @@ func Register(c *gin.Context) {
 		return
 	}
 
+	// check if the user exists
+	var user models.User
+	initializers.DB.First(&user, "email = ?", body.Email)
+
+	if user.ID != 0 {
+		helpers.ErrorJSON(c, http.StatusConflict, "User already exists")
+		return
+	}
+
 	// hash the password
 	hash, err := bcrypt.GenerateFromPassword([]byte(body.Password), 10)
 
@@ -34,7 +43,7 @@ func Register(c *gin.Context) {
 	}
 
 	// create the user
-	user := models.User{Email: body.Email, Password: string(hash)}
+	user = models.User{Email: body.Email, Password: string(hash)}
 	result := initializers.DB.Create(&user)
 
 	if result.Error != nil {
