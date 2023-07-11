@@ -26,6 +26,6 @@ type Movie struct {
 	DirectorId       uint
 	Director         *Person `gorm:"foreignKey:DirectorId"`
 	Genres           []Genre `gorm:"many2many:movie_genres;"`
-	Casts            []Cast  `gorm:"foreignKey:MovieId"`
-	Crews            []Crew  `gorm:"foreignKey:MovieId"`
+	Casts            *[]Cast `gorm:"foreignKey:MovieId" json:",omitempty"`
+	Crews            *[]Crew `gorm:"foreignKey:MovieId" json:",omitempty"`
 }
