@@ -12,6 +12,6 @@ func GetMe(c *gin.Context) {
 
 	// response
 	c.JSON(http.StatusOK, gin.H{
-		"user": user,
+		"data": user,
 	})
 }
