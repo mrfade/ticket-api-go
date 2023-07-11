@@ -51,6 +51,9 @@ func main() {
 	r.GET("/genres", middlewares.PagedResource, controllers.GetGenres)
 	r.GET("/genre/:id", controllers.GetGenre)
 
+	// Me
+	r.GET("/me", middlewares.RequireAuth, controllers.GetMe)
+
 	// Movies
 	r.GET("/movies", middlewares.PagedResource, controllers.GetMovies)
 	r.GET("/movie/:id", controllers.GetMovie)
